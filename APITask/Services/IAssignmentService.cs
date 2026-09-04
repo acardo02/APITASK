@@ -11,5 +11,7 @@ namespace APITask.Services
         Task<AssignmentResponseDTO?> GetAssignmentById(int id);
 
         Task<bool> UpdateAssignment(int id, UpdateAssigmentDTO assignmentDto);
+
+        Task<bool> DeleteAssignment(int id);
     }
 }

@@ -84,5 +84,23 @@ namespace APITask.Controllers
 
             return NoContent();
         }
+
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> DeleteTask(int id)
+        {
+            var deleted = await _assignmentService.DeleteAssignment(id);
+
+            if (!deleted)
+            {
+                return Problem(
+                    statusCode: StatusCodes.Status404NotFound,
+                    title: "Task not found"
+                );
+            }
+
+            return NoContent();
+        }
     }
 }

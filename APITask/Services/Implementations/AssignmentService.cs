@@ -91,5 +91,22 @@ namespace APITask.Services.Implementations
 
             return true;
         }
+
+        public async Task<bool> DeleteAssignment(int id)
+        {
+            var assignment = await _dbContext.Assignments.SingleOrDefaultAsync(a => a.Id == id);
+
+            if (assignment == null)
+            {
+                return false;
+            }
+
+
+            _dbContext.Assignments.Remove(assignment);
+
+            _dbContext.SaveChanges();
+
+            return true;
+        }
     }
 }
