@@ -1,5 +1,6 @@
 ﻿using APITask.DTOs;
 using APITask.Services;
+using APITask.Services.Implementations;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APITask.Controllers
@@ -9,6 +10,33 @@ namespace APITask.Controllers
     public class AssignmentController(IAssignmentService assignmentService) : ControllerBase
     {
         private readonly IAssignmentService _assignmentService = assignmentService;
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<AssignmentResponseDTO>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<AssignmentResponseDTO>> GetAllTasks()
+        {
+            var assignments = await _assignmentService.GetAllAssignments();
+
+            return Ok(assignments);
+        }
+
+        [HttpGet("{id:int}")]
+        [ProducesResponseType(typeof(AssignmentResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<AssignmentResponseDTO>> GetTaskById(int id)
+        {
+            var assignment = await _assignmentService.GetAssignmentById(id);
+
+            if (assignment is null)
+            {
+                return Problem(
+                    statusCode: StatusCodes.Status404NotFound,
+                    title: "Task not found"
+                );
+            }
+
+            return Ok(assignment);
+        }
 
         [HttpPost]
         [ProducesResponseType(typeof(AssignmentResponseDTO), StatusCodes.Status201Created)]
@@ -26,7 +54,7 @@ namespace APITask.Controllers
 
             var result = await _assignmentService.CreateAssignment(createAssigmentDTO);
 
-            return Ok(result);
+            return CreatedAtAction(nameof(GetTaskById), new { id = result.Id }, result);
         }
     }
 }

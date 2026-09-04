@@ -1,6 +1,7 @@
 ﻿using APITask.Data;
 using APITask.DTOs;
 using APITask.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace APITask.Services.Implementations
 {
@@ -30,6 +31,35 @@ namespace APITask.Services.Implementations
                 assignment.CompletedAt,
                 assignment.CreatedAt
             );
+        }
+
+        public async Task<IEnumerable<AssignmentResponseDTO>> GetAllAssignments()
+        {
+            return await _dbContext.Assignments
+                .AsNoTracking()
+                .Select(a => new AssignmentResponseDTO(
+                    a.Id,
+                    a.Title,
+                    a.Description,
+                    a.IsCompleted,
+                    a.CompletedAt,
+                    a.CreatedAt
+                )).ToListAsync();
+        }
+
+        public async Task<AssignmentResponseDTO?> GetAssignmentById(int id)
+        {
+            return await _dbContext.Assignments
+                .AsNoTracking()
+                .Where(a => a.Id == id)
+                .Select(a => new AssignmentResponseDTO(
+                    a.Id,
+                    a.Title,
+                    a.Description ?? "",
+                    a.IsCompleted,
+                    a.CompletedAt,
+                    a.CreatedAt
+                )).FirstOrDefaultAsync();
         }
     }
 }
