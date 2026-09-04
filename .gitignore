@@ -1,0 +1,33 @@
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+dist/
+
+
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+*.userprefs
+
+
+packages/
+*.nupkg
+project.lock.json
+project.assets.json
+
+
+
+## Test & Coverage Results
+[Tt]est[Rr]esult*/
+coverage/
+*.coverage
+*.coveragexml
+
+
+## OS Generated Files
+.DS_Store
+Thumbs.db
+desktop.ini
