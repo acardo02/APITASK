@@ -56,5 +56,33 @@ namespace APITask.Controllers
 
             return CreatedAtAction(nameof(GetTaskById), new { id = result.Id }, result);
         }
+
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> UpdateTask(int id, UpdateAssigmentDTO updateAssigmentDTO)
+        {
+            if (string.IsNullOrEmpty(updateAssigmentDTO.Title))
+            {
+                return Problem(
+                    statusCode: StatusCodes.Status400BadRequest,
+                    title: "Invalid Request",
+                    detail: "The title can't be empty"
+                );
+            }
+
+            var updated = await _assignmentService.UpdateAssignment(id, updateAssigmentDTO);
+
+            if (!updated)
+            {
+                return Problem(
+                    statusCode: StatusCodes.Status404NotFound,
+                    title: "Task not found"
+                );
+            }
+
+            return NoContent();
+        }
     }
 }

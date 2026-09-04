@@ -9,5 +9,7 @@ namespace APITask.Services
         Task<IEnumerable<AssignmentResponseDTO>> GetAllAssignments();
 
         Task<AssignmentResponseDTO?> GetAssignmentById(int id);
+
+        Task<bool> UpdateAssignment(int id, UpdateAssigmentDTO assignmentDto);
     }
 }

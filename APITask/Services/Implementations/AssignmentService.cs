@@ -61,5 +61,35 @@ namespace APITask.Services.Implementations
                     a.CreatedAt
                 )).FirstOrDefaultAsync();
         }
+
+        public async Task<bool> UpdateAssignment(int id, UpdateAssigmentDTO assignmentDto)
+        {
+
+            var assignment = await _dbContext.Assignments
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (assignment == null)
+            {
+                return false;
+            }
+
+            assignment.Title = assignmentDto.Title;
+            assignment.Description = assignmentDto.Description ?? "";
+
+            if (assignmentDto.IsCompleted && !assignment.IsCompleted)
+            {
+                assignment.CompletedAt = DateTime.UtcNow;
+            }
+            else if (!assignmentDto.IsCompleted)
+            {
+                assignment.CompletedAt = null;
+            }
+
+            assignment.IsCompleted = assignmentDto.IsCompleted;
+
+            await _dbContext.SaveChangesAsync();
+
+            return true;
+        }
     }
 }
