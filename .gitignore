@@ -31,3 +31,6 @@ coverage/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Local Docker secrets
+.env
